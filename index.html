@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMIGO SECRETO STZ9</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Supabase JS Client via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div class="container">
+    <header class="header">
+      <div class="badge">STZ9</div>
+      <h1>AMIGO SECRETO STZ9</h1>
+      <p class="subtitle">Sorteio blindado, individual e seguro</p>
+    </header>
+
+    <!-- Navegação de Abas -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="trocarAba('aba-cadastro')">1. Meu Cadastro</button>
+      <button class="tab-btn" onclick="trocarAba('aba-revelar')">2. Ver Meu Amigo</button>
+      <button class="tab-btn" onclick="trocarAba('aba-admin')">⚙️ Sorteio</button>
+    </nav>
+
+    <!-- Mensagens de Alerta Globais -->
+    <div id="mensagem-status" class="alerta oculto"></div>
+
+    <!-- ABA 1: CADASTRO DO PARTICIPANTE -->
+    <section id="aba-cadastro" class="conteudo-aba ativo">
+      <h2>Defina sua Senha e seus Desejos</h2>
+      <p class="instrucoes">Escolha seu nome, crie um PIN numérico de 4 dígitos e coloque até 3 opções de presentes que você gostaria de ganhar.</p>
+
+      <form id="form-cadastro" onsubmit="salvarCadastro(event)">
+        <div class="campo">
+          <label for="select-participante-cad">Seu Nome:</label>
+          <select id="select-participante-cad" required>
+            <option value="">Carregando participantes...</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="input-pin-cad">Crie seu PIN (4 dígitos numéricos):</label>
+          <input type="password" id="input-pin-cad" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" placeholder="Ex: 1234" required>
+        </div>
+
+        <div class="bloco-presentes">
+          <label>O que você gostaria de ganhar? (Até 3 sugestões)</label>
+          <input type="text" id="pres1" placeholder="Opção 1 (ex: Chocolate, Meia, Livro...)" required>
+          <input type="text" id="pres2" placeholder="Opção 2 (opcional)">
+          <input type="text" id="pres3" placeholder="Opção 3 (opcional)">
+        </div>
+
+        <button type="submit" id="btn-salvar-cad" class="btn btn-primario">Salvar Meus Dados</button>
+      </form>
+    </section>
+
+    <!-- ABA 2: REVELAÇÃO DO AMIGO SECRETO -->
+    <section id="aba-revelar" class="conteudo-aba">
+      <h2>Consultar Meu Amigo Secreto</h2>
+      <p class="instrucoes">Selecione seu nome e digite o PIN de 4 dígitos que você cadastrou.</p>
+
+      <form id="form-revelar" onsubmit="consultarAmigo(event)">
+        <div class="campo">
+          <label for="select-participante-rev">Seu Nome:</label>
+          <select id="select-participante-rev" required>
+            <option value="">Carregando participantes...</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="input-pin-rev">Seu PIN (4 dígitos):</label>
+          <input type="password" id="input-pin-rev" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" placeholder="Digite seu PIN" required>
+        </div>
+
+        <button type="submit" id="btn-revelar" class="btn btn-primario">Revelar Meu Amigo</button>
+      </form>
+
+      <!-- Cartão com o Resultado -->
+      <div id="cartao-resultado" class="cartao-resultado oculto">
+        <span class="etiqueta-topo">SEU AMIGO SECRETO É:</span>
+        <h3 id="nome-amigo-sorteado" class="nome-destaque">---</h3>
+
+        <div class="separador"></div>
+
+        <p class="texto-dica">E aqui abaixo seguem as sugestões de presentes que ele(a) fez para te ajudar a comprar algo bem legal:</p>
+        <ul id="lista-presentes-sorteado" class="lista-presentes">
+          <!-- Injetado via JS -->
+        </ul>
+
+        <button type="button" class="btn btn-secundario" onclick="ocultarResultado()">Ocultar da Tela</button>
+      </div>
+    </section>
+
+    <!-- ABA 3: ADMIN / REALIZAÇÃO DO SORTEIO -->
+    <section id="aba-admin" class="conteudo-aba">
+      <h2>Painel do Sorteio</h2>
+      <p class="instrucoes">Execute o sorteio na frente da equipe com total sigilo. A tela apenas confirmará a realização.</p>
+
+      <div class="card-aviso">
+        <strong>Status dos Participantes:</strong>
+        <p id="total-cadastrados-texto">Carregando dados da equipe...</p>
+      </div>
+
+      <div class="campo-admin">
+        <label for="senha-mestre">Senha do Painel (para evitar cliques acidentais):</label>
+        <input type="password" id="senha-mestre" placeholder="Digite a chave mestre">
+      </div>
+
+      <button type="button" id="btn-sortear" class="btn btn-perigo" onclick="executarSorteio()">
+        🎲 Realizar Sorteio Agora
+      </button>
+
+      <div id="painel-sorteio-sucesso" class="aviso-sucesso-sorteio oculto">
+        <h3>🎉 Sorteio Realizado com Sucesso!</h3>
+        <p>Todos os pares foram criptografados e salvos no banco. Cada participante já pode consultar seu resultado individualmente com seu PIN.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
